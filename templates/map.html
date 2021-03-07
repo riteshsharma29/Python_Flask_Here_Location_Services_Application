@@ -1,0 +1,55 @@
+<html>
+  <head>
+  <h1><a href = "\">BACK</a></h1>
+  <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+     <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
+  </head>
+  <body style='margin: 0'>
+  <div style="width: 100vw; height: 100vh" id="mapContainer"></div>
+  <script> 
+
+    // Initialize the platform object:
+    var platform = new H.service.Platform({
+    'apikey': '{{apikey}}'
+    });
+
+	const lng = {{longitude}};
+	const lat = {{latitude}};
+   
+// Obtain the default map types from the platform object   
+	var defaultLayers = platform.createDefaultLayers();
+
+// Instantiate (and display) a map object:
+var map = new H.Map(
+    document.getElementById('mapContainer'),
+    defaultLayers.vector.normal.map,
+    {
+      zoom: 8,
+      center: { lat: lat, lng: lng }
+    });
+	
+	const marker = new H.map.Marker({lat: lat, lng: lng});
+	map.addObject(marker);
+	
+	// add a resize listener to make sure that the map occupies the whole container
+	window.addEventListener('resize', () => map.getViewPort().resize());
+
+	//Step 3: make the map interactive
+	// MapEvents enables the event system
+	// Behavior implements default interactions for pan/zoom (also on mobile touch environments)
+	var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+
+	// Create the default UI components
+	var ui = H.ui.UI.createDefault(map, defaultLayers);
+
+	// Now use the map as required...
+	window.onload = function () {
+	  moveMapToBerlin(map);
+	}	
+  </script>
+  </body>
+</html>
